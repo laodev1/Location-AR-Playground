@@ -33,7 +33,23 @@
         var longitudeStep = 0.0100;
         var latitudeStep = 0.0100;
         var scaleStep = 0.10;
+       document.addEventListener('DOMContentLoaded', function () {
+            updateScale();
+            window.addEventListener('resize', updateScale);
+        });
 
+        function updateScale() {
+            var cameraEl = document.querySelector('a-camera');
+            var camera = cameraEl.getObject3D('camera');
+            var screenHeight = window.innerHeight;
+            var distance = 5; // distance of the object from the camera
+            var vFov = camera.fov * Math.PI / 180; // convert vertical fov to radians
+            var heightAtDistance = 2 * Math.tan(vFov / 2) * distance; // visible height
+
+            var desiredHeight = screenHeight / 2;
+            var scale = desiredHeight / heightAtDistance;
+            entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
+        }
         document.addEventListener('keydown', function (event) {
            let entity = document.querySelector('a-entity');
            console.log('latitude', latitude, 'longitude', longitude, 'scale', scale)
