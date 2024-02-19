@@ -23,5 +23,40 @@
             rotation="0 180 0" scale="0.55 0.55 0.55" gps-entity-place="longitude: 33.44302; latitude: -111.79786;"
             />
     </a-scene>
+
+    <!-- methods to move the model location around, change the scale etc. using the mouse-->
+    <script>
+        var entity = document.querySelector('a-entity');
+        var scale = 0.55;
+        var longitude = 33.44302;
+        var latitude = -111.79786;
+        var longitudeStep = 0.0001;
+        var latitudeStep = 0.0001;
+        var scaleStep = 0.01;
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowUp') {
+                latitude += latitudeStep;
+                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
+            } else if (event.key === 'ArrowDown') {
+                latitude -= latitudeStep;
+                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
+            } else if (event.key === 'ArrowLeft') {
+                longitude -= longitudeStep;
+                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
+            } else if (event.key === 'ArrowRight') {
+                longitude += longitudeStep;
+                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
+            } else if (event.key === 'w') {
+                scale += scaleStep;
+                entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
+            } else if (event.key === 's') {
+                scale -= scaleStep;
+                entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
+            }
+        });
+
+    </script>
+
 </body>
 </html>
