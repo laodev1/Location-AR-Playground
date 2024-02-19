@@ -18,7 +18,7 @@
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
 
-        <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" rotation="0 180 0" scale="0.55 0.55 0.55"
+        <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" rotation="" scale="0.1 0.1 0.1"
             gps-entity-place="longitude: 33.44302; latitude: -111.79786;" />
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
@@ -27,9 +27,9 @@
     <script>
         var entity = document.querySelector('a-entity');
         console.log(entity);
-        var scale = 0.55;
-        var longitude = 33.44302;
-        var latitude = -111.79786;
+        var scale = -22.13000000000066;
+        var longitude = 33.42651999999945;
+        var latitude = -111.94046000000473;
         var longitudeStep = 0.0001;
         var latitudeStep = 0.0001;
         var scaleStep = 0.01;
