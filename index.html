@@ -17,91 +17,34 @@
     <a-scene vr-mode-ui="enabled: false" embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
-
-        <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" rotation="" scale="-186.1 -186.1 -186.1"
-            gps-entity-place="longitude: 33.42651999999945; latitude: -111.94046000000473;" />
+        <a-entity id="mirror" gltf-model="./assets/models/enchanted-mirror/scene.gltf"
+            gps-entity-place="longitude: 33.42651999999945; latitude: -111.94046000000473;">
+        </a-entity>
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
 
-    <!-- methods to move the model location around, change the scale etc. using the mouse-->
     <script>
-        var entity = document.querySelector('a-entity');
-        console.log(entity);
-        var scale = -186;
-        var longitude = 33.42651999999945;
-        var latitude = -111.94046000000473;
-        var longitudeStep = 0.0100;
-        var latitudeStep = 0.0100;
-        var scaleStep = 0.10;
-       document.addEventListener('DOMContentLoaded', function () {
-            updateScale();
-            window.addEventListener('resize', updateScale);
+        document.addEventListener('DOMContentLoaded', function () {
+            var entity = document.querySelector('#mirror');
+            updateScale(entity);
+            window.addEventListener('resize', function () {
+                updateScale(entity);
+            });
         });
 
-        function updateScale() {
+        function updateScale(entity) {
             var cameraEl = document.querySelector('a-camera');
             var camera = cameraEl.getObject3D('camera');
             var screenHeight = window.innerHeight;
-            var distance = 5; // distance of the object from the camera
-            var vFov = camera.fov * Math.PI / 180; // convert vertical fov to radians
-            var heightAtDistance = 2 * Math.tan(vFov / 2) * distance; // visible height
+            var distance = 5; // Adjust this as needed
+            var vFov = camera.fov * Math.PI / 180;
+            var heightAtDistance = 2 * Math.tan(vFov / 2) * distance;
 
             var desiredHeight = screenHeight / 2;
             var scale = desiredHeight / heightAtDistance;
             entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
         }
-        document.addEventListener('keydown', function (event) {
-           let entity = document.querySelector('a-entity');
-           console.log('latitude', latitude, 'longitude', longitude, 'scale', scale)
-            if (event.key === 'ArrowUp') {
-                latitude += latitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'ArrowDown') {
-                latitude -= latitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'ArrowLeft') {
-                longitude -= longitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'ArrowRight') {
-                longitude += longitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'w') {
-                scale += scaleStep;
-                entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
-            } else if (event.key === 's') {
-                scale -= scaleStep;
-                entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
-            }
-        });
-        let initialDistance = null;
-
-            function getDistance(touches) {
-                let dx = touches[0].pageX - touches[1].pageX;
-                let dy = touches[0].pageY - touches[1].pageY;
-                return Math.sqrt(dx * dx + dy * dy);
-            }
-
-            document.addEventListener('touchstart', function (event) {
-                if (event.touches.length === 2) {
-                    initialDistance = getDistance(event.touches);
-                }
-            });
-
-            document.addEventListener('touchmove', function (event) {
-                if (event.touches.length === 2) {
-                    let distance = getDistance(event.touches);
-                    let scaleChange = distance - initialDistance;
-                    scale += scaleChange * 0.001; // Scale factor adjustment
-                    entity.setAttribute('scale', `${scale} ${scale} ${scale}`);
-                    initialDistance = distance;
-                }
-            });
-
-            document.addEventListener('touchend', function (event) {
-                initialDistance = null; // Reset initial distance on touch end
-            });
     </script>
-
 </body>
 
 </html>
