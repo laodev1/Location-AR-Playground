@@ -17,73 +17,47 @@
     <a-scene vr-mode-ui="enabled: false" embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
-
         <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" rotation="" scale=""
-            gps-entity-place="longitude: 33.42651999999945; latitude: -111.94046000000473;" />
+            id="mirrorEntity"></a-entity>
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
 
-    <!-- methods to move the model location around, change the scale etc. using the mouse-->
     <script>
-        var entity = document.querySelector('a-entity');
-        console.log(entity);
-        var scale = 0.5;
-        var longitude = 33.42651999999945;
-        var latitude = -111.94046000000473;
-        var longitudeStep = 0.0100;
-        var latitudeStep = 0.0100;
-        var scaleStep = 1;
+        // Function to convert degrees to radians
+        function toRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
 
-        document.addEventListener('keydown', function (event) {
-           let entity = document.querySelector('a-entity');
-           console.log('latitude', latitude, 'longitude', longitude, 'scale', scale)
-            if (event.key === 'ArrowUp') {
-                latitude += latitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'ArrowDown') {
-                latitude -= latitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'ArrowLeft') {
-                longitude -= longitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'ArrowRight') {
-                longitude += longitudeStep;
-                entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
-            } else if (event.key === 'w') {
-                scale += scaleStep;
-                entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
-            } else if (event.key === 's') {
-                scale -= scaleStep;
-                entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
-            }
+        // Function to calculate new latitude 20 feet to the north
+        function calculateNewLatitude(lat, distance) {
+            // Earth's radius in feet
+            var earthRadius = 20902231;
+
+            // Convert distance to radians
+            var distanceRadians = distance / earthRadius;
+
+            // Convert latitude to radians
+            var latRadians = toRadians(lat);
+
+            // Calculate new latitude
+            var newLatRadians = latRadians + distanceRadians;
+
+            // Convert back to degrees
+            return newLatRadians * 180 / Math.PI;
+        }
+
+        // Get user's current location
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Calculate new latitude 20 feet to the north
+            var newLatitude = calculateNewLatitude(latitude, 20);
+
+            // Set mirror's position to new location
+            var mirrorEntity = document.getElementById('mirrorEntity');
+            mirrorEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
         });
-        let initialDistance = null;
-
-            function getDistance(touches) {
-                let dx = touches[0].pageX - touches[1].pageX;
-                let dy = touches[0].pageY - touches[1].pageY;
-                return Math.sqrt(dx * dx + dy * dy);
-            }
-
-            document.addEventListener('touchstart', function (event) {
-                if (event.touches.length === 2) {
-                    initialDistance = getDistance(event.touches);
-                }
-            });
-
-            document.addEventListener('touchmove', function (event) {
-                if (event.touches.length === 2) {
-                    let distance = getDistance(event.touches);
-                    let scaleChange = distance - initialDistance;
-                    scale += scaleChange * 0.001; // Scale factor adjustment
-                    entity.setAttribute('scale', `${scale} ${scale} ${scale}`);
-                    initialDistance = distance;
-                }
-            });
-
-            document.addEventListener('touchend', function (event) {
-                initialDistance = null; // Reset initial distance on touch end
-            });
     </script>
 
 </body>
