@@ -57,7 +57,33 @@
                 entity.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
             }
         });
+        let initialDistance = null;
 
+            function getDistance(touches) {
+                let dx = touches[0].pageX - touches[1].pageX;
+                let dy = touches[0].pageY - touches[1].pageY;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            document.addEventListener('touchstart', function (event) {
+                if (event.touches.length === 2) {
+                    initialDistance = getDistance(event.touches);
+                }
+            });
+
+            document.addEventListener('touchmove', function (event) {
+                if (event.touches.length === 2) {
+                    let distance = getDistance(event.touches);
+                    let scaleChange = distance - initialDistance;
+                    scale += scaleChange * 0.001; // Scale factor adjustment
+                    entity.setAttribute('scale', `${scale} ${scale} ${scale}`);
+                    initialDistance = distance;
+                }
+            });
+
+            document.addEventListener('touchend', function (event) {
+                initialDistance = null; // Reset initial distance on touch end
+            });
     </script>
 
 </body>
