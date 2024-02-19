@@ -36,7 +36,7 @@
 
         document.addEventListener('keydown', function (event) {
            let entity = document.querySelector('a-entity');
-           console.log(entity);
+           console.log('latitude', latitude, 'longitude', longitude, 'scale', scale)
             if (event.key === 'ArrowUp') {
                 latitude += latitudeStep;
                 entity.setAttribute('gps-entity-place', 'longitude: ' + longitude + '; latitude: ' + latitude + ';');
