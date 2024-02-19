@@ -66,11 +66,12 @@
             var longitude = position.coords.longitude;
 
             // Calculate new latitude 20 feet to the north
-            var newLatitude = calculateNewLatitude(latitude, 20);
+            var newLatitude = calculateNewLatitude(latitude, 40);
 
             // Set mirror's position to new location
             var mirrorEntity = document.getElementById('mirrorEntity');
             mirrorEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
+            console.log(position)
         });
     </script>
 
