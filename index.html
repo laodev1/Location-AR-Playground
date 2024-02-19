@@ -17,11 +17,12 @@
     <a-scene vr-mode-ui="enabled: false" embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
-        <a-camera gps-camera rotation-reader></a-camera>
+       
         <a-entity
             gltf-model="./assets/models/enchanted-mirror/scene.gltf"
             rotation="0 180 0" scale="0.55 0.55 0.55" gps-entity-place="longitude: 33.44302; latitude: -111.79786;"
             />
+            <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
 
     <!-- methods to move the model location around, change the scale etc. using the mouse-->
