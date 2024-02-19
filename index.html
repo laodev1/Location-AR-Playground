@@ -14,50 +14,25 @@
 </head>
 
 <body style='margin: 0; overflow: hidden;'>
-<a-scene vr-mode-ui="enabled: false" embedded id="arScene">
-    <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" rotation="" scale=""
-        id="mirrorEntity"></a-entity>
-    <a-camera gps-camera rotation-reader></a-camera>
-</a-scene>
+    <a-scene vr-mode-ui="enabled: false" embedded id="arScene">
+        <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" rotation="" scale="5 5 5"
+            id="mirrorEntity"></a-entity>
+        <a-camera gps-camera rotation-reader></a-camera>
+    </a-scene>
 
     <script>
-            function updateARSceneSize() {
-                    var scene = document.getElementById('arScene');
-                    var width = window.innerWidth;
-                    var height = window.innerHeight;
+        function updateARSceneSize() {
+            var scene = document.getElementById('arScene');
+            var width = window.innerWidth;
+            var height = window.innerHeight;
 
-                    // Update the arjs attributes
-                    scene.setAttribute('arjs', 'sourceType: webcam; sourceWidth:' + width + '; sourceHeight:' + height + '; displayWidth:' + width + '; displayHeight:' + height + '; debugUIEnabled: false;');
-                }
-
-                // Update AR.js scene size on load and window resize
-                window.addEventListener('load', updateARSceneSize);
-                window.addEventListener('resize', updateARSceneSize);
-        // Calculate scale factor based on window size
-        function calculateScale() {
-            var viewportWidth = window.innerWidth;
-            var viewportHeight = window.innerHeight;
-            // Example scale calculation - adjust as needed
-            var scale = Math.min(viewportWidth, viewportHeight) / 20000;
-            return scale;
+            // Update the arjs attributes
+            scene.setAttribute('arjs', 'sourceType: webcam; sourceWidth:' + width + '; sourceHeight:' + height + '; displayWidth:' + width + '; displayHeight:' + height + '; debugUIEnabled: false;');
         }
 
-        // Apply scale to GLTF entity
-        function applyScale() {
-            var mirrorEntity = document.getElementById('mirrorEntity');
-            var scale = calculateScale();
-            mirrorEntity.setAttribute('scale', `${scale} ${scale} ${scale}`);
-        }
-
-        // Apply scale on window resize
-        window.addEventListener('resize', function () {
-            applyScale();
-        });
-
-        // Apply scale when scene is loaded
-        document.querySelector('a-scene').addEventListener('loaded', function () {
-            applyScale();
-        });
+        // Update AR.js scene size on load and window resize
+        window.addEventListener('load', updateARSceneSize);
+        window.addEventListener('resize', updateARSceneSize);
 
         // Function to convert degrees to radians
         function toRadians(degrees) {
