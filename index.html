@@ -18,7 +18,7 @@
         <!-- Adjusted scale to 0.005 (original scale of 5 divided by 1,000) -->
         <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" scale="0.005 0.005 0.005"
             id="mirrorEntity"></a-entity>
-        <a-camera gps-camera></a-camera>
+        <a-camera  look-controls-enabled='false' arjs-device-orientation-controls='smoothingFactor: 0.1' gps-new-camera></a-camera>
     </a-scene>
 
 
@@ -65,11 +65,11 @@
             var longitude = position.coords.longitude;
 
             // Calculate new latitude 20 feet to the north
-            var newLatitude = calculateNewLatitude(latitude, 20);
+            var newLatitude = calculateNewLatitude(latitude, 100);
 
             // Set mirror's position to new location
             var mirrorEntity = document.getElementById('mirrorEntity');
-            mirrorEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
+            mirrorEntity.setAttribute('gps-new-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
         });
     </script>
 
