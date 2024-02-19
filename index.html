@@ -23,6 +23,32 @@
     </a-scene>
 
     <script>
+        // Calculate scale factor based on window size
+        function calculateScale() {
+            var viewportWidth = window.innerWidth;
+            var viewportHeight = window.innerHeight;
+            // Example scale calculation - adjust as needed
+            var scale = Math.min(viewportWidth, viewportHeight) / 1000;
+            return scale;
+        }
+
+        // Apply scale to GLTF entity
+        function applyScale() {
+            var mirrorEntity = document.getElementById('mirrorEntity');
+            var scale = calculateScale();
+            mirrorEntity.setAttribute('scale', `${scale} ${scale} ${scale}`);
+        }
+
+        // Apply scale on window resize
+        window.addEventListener('resize', function () {
+            applyScale();
+        });
+
+        // Apply scale when scene is loaded
+        document.querySelector('a-scene').addEventListener('loaded', function () {
+            applyScale();
+        });
+
         // Function to convert degrees to radians
         function toRadians(degrees) {
             return degrees * Math.PI / 180;
