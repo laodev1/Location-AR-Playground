@@ -15,16 +15,15 @@
 
 <body style='margin: 0; overflow: hidden;'>
     <a-scene vr-mode-ui="enabled: false" embedded id="arScene">
-        <!-- Text Entity -->
-        <a-entity id="textEntity" position="0 1 -3" rotation="0 0 0">
-            <a-plane color="white" height="1" width="2" shadow></a-plane>
-            <a-text value="This is some text" color="black" align="center" position="0 0 0.1"></a-text>
-        </a-entity>
-        <a-camera gps-camera rotation-reader></a-camera>
+        <!-- Adjusted scale to 0.005 (original scale of 5 divided by 1,000) -->
+        <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" scale="0.005 0.005 0.005"
+            id="mirrorEntity"></a-entity>
+        <a-camera gps-camera></a-camera>
     </a-scene>
 
+
     <script>
-       function updateARSceneSize() {
+        function updateARSceneSize() {
             var scene = document.getElementById('arScene');
             var width = window.innerWidth;
             var height = window.innerHeight;
