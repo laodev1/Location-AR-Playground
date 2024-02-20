@@ -59,17 +59,40 @@
             return newLatRadians * 180 / Math.PI;
         }
 
+        var lastLatitude = null;
+        var lastLongitude = null;
+        var movementThreshold = 0.0001; // Set a threshold for movement
+
+        function updatePosition(latitude, longitude) {
+            if (lastLatitude === null || lastLongitude === null ||
+                Math.abs(latitude - lastLatitude) > movementThreshold ||
+                Math.abs(longitude - lastLongitude) > movementThreshold) {
+
+                // Calculate new latitude
+                var newLatitude = calculateNewLatitude(latitude, 70);
+
+                // Set mirror's position to new location
+                var mirrorEntity = document.getElementById('mirrorEntity');
+                mirrorEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
+
+                lastLatitude = latitude;
+                lastLongitude = longitude;
+            }
+        }
+
         // Get user's current location
         navigator.geolocation.getCurrentPosition(function (position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
+            updatePosition(position.coords.latitude, position.coords.longitude);
+        });
 
-            // Calculate new latitude 20 feet to the north
-            var newLatitude = calculateNewLatitude(latitude, 20);
-
-            // Set mirror's position to new location
-            var mirrorEntity = document.getElementById('mirrorEntity');
-            mirrorEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
+        // Consider adding a watchPosition call to handle ongoing location updates
+        navigator.geolocation.watchPosition(function (position) {
+            updatePosition(position.coords.latitude, position.coords.longitude);
+        }, function (error) {
+            console.warn('ERROR(' + error.code + '): ' + error.message);
+        }, {
+            enableHighAccuracy: true,
+            maximumAge: 0
         });
     </script>
 
