@@ -15,8 +15,9 @@
 
 <body style='margin: 0; overflow: hidden;'>
     <a-scene vr-mode-ui="enabled: false" embedded id="arScene">
-        <!-- Image Entity -->
-        <a-image src="./assets/images/magic-mirror.webp" scale="1 1 1" id="mirrorEntity"></a-image>
+        <!-- Adjusted scale to 0.005 (original scale of 5 divided by 1,000) -->
+        <a-entity gltf-model="./assets/models/enchanted-mirror/scene.gltf" scale="0.010 0.010 0.010"
+            id="mirrorEntity"></a-entity>
         <a-camera gps-camera></a-camera>
     </a-scene>
 
