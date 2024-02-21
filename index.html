@@ -15,14 +15,17 @@
 
 <body style='margin: 0; overflow: hidden;'>
     <a-scene vr-mode-ui="enabled: false" embedded id="arScene">
-        <!-- Image Entity -->
-        <a-image src="./assets/images/magic_mirror_transparent_background_portrait.png" scale="5 5 5" id="mirrorEntity"></a-image>
-        <a-camera gps-camera></a-camera>
+        <a-camera gps-camera rotation-reader></a-camera>
+        <!-- Text Entity -->
+        <a-entity id="textEntity" position="0 1 -3" rotation="0 0 0" gps-entity-place="latitude: 33.507820; longitude:-111.92622;">
+            <a-plane color="white" height="1" width="2" shadow></a-plane>
+            <a-text value="Hi Ethan! I put this here for you. Cool Right?" color="black" align="center" position="0 0 0.1"></a-text>
+        </a-entity>
+       
     </a-scene>
 
-
     <script>
-        function updateARSceneSize() {
+       function updateARSceneSize() {
             var scene = document.getElementById('arScene');
             var width = window.innerWidth;
             var height = window.innerHeight;
@@ -33,7 +36,7 @@
 
         // Update AR.js scene size on load and window resize
         window.addEventListener('load', updateARSceneSize);
-        window.addEventListener('resize', updateARSceneSize);
+        // window.addEventListener('resize', updateARSceneSize);
 
         // Function to convert degrees to radians
         function toRadians(degrees) {
@@ -58,40 +61,18 @@
             return newLatRadians * 180 / Math.PI;
         }
 
-        var lastLatitude = null;
-        var lastLongitude = null;
-        var movementThreshold = 0.0001; // Set a threshold for movement
-
-        function updatePosition(latitude, longitude) {
-            if (lastLatitude === null || lastLongitude === null ||
-                Math.abs(latitude - lastLatitude) > movementThreshold ||
-                Math.abs(longitude - lastLongitude) > movementThreshold) {
-
-                // Calculate new latitude
-                var newLatitude = calculateNewLatitude(latitude, 70);
-
-                // Set mirror's position to new location
-                var mirrorEntity = document.getElementById('mirrorEntity');
-                mirrorEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
-
-                lastLatitude = latitude;
-                lastLongitude = longitude;
-            }
-        }
-
         // Get user's current location
         navigator.geolocation.getCurrentPosition(function (position) {
-            updatePosition(position.coords.latitude, position.coords.longitude);
-        });
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
 
-        // Consider adding a watchPosition call to handle ongoing location updates
-        navigator.geolocation.watchPosition(function (position) {
-            updatePosition(position.coords.latitude, position.coords.longitude);
-        }, function (error) {
-            console.warn('ERROR(' + error.code + '): ' + error.message);
-        }, {
-            enableHighAccuracy: true,
-            maximumAge: 0
+            // Calculate new latitude 20 feet to the north
+            var newLatitude = calculateNewLatitude(latitude, 10);
+
+            // Set mirror's position to new location
+            //var textEntity = document.getElementById('textEntity');
+            // textEntity.setAttribute('gps-entity-place', `latitude: ${newLatitude}; longitude: ${longitude};`);
+            console.log(position)
         });
     </script>
 
